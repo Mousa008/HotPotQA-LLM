@@ -1,37 +1,53 @@
-# HotPotQA-LLM
- HotPotQA LLM Question Answering with RAG  
+# HotPotQA LLM Question Answering with RAG  
+### Prompting → Evidence Conditioning → Embedding + FAISS Retrieval
 
-# Data
+This project builds an end-to-end **LLM-based Question Answering pipeline** for the **HotPotQA** multi-hop QA dataset. The system uses **Llama-3.1-8B-Instruct** loaded through **Unsloth 4-bit quantization** in Google Colab, and progressively improves from a question-only baseline to an evidence-grounded **Retrieval-Augmented Generation (RAG)** pipeline.
 
-This repository does not include the full HotPotQA dataset.
-
-Download the dataset from the official HotPotQA website:
-
-```text
-https://hotpotqa.github.io/
-
-Required file for this project:
-
-hotpot_dev_fullwiki_v1.json
-
-For the provided Colab notebook, place the file in Google Drive at:
-
-/content/drive/MyDrive/hotpot/hotpot_dev_fullwiki_v1.json
-
-Alternatively, edit DATA_PATH in the notebook to match your local or Drive path.
-
-The full dataset is excluded from GitHub because it is large and should be obtained from the official source.
-
-
+The final system retrieves relevant evidence from the provided HotPotQA context using **sentence embeddings + FAISS**, then prompts the LLM to generate a short answer span in a strict `FINAL: <answer>` format. The pipeline includes batching, autosave, resume support, and evaluation using the official HotPotQA evaluator.
 
 ---
 
-# 6) `results/results.csv` — copy/paste this
+## Project Motivation
 
-```csv
-stage,method,em,f1,precision,recall,notes
-Stage 1,Question-only prompting,0.016205,0.131470,0.098342,0.263180,Baseline with no evidence/context
-Stage 2,Context + strict FINAL output + cleaning,0.207562,0.326949,0.328006,0.382556,Evidence-conditioned prompting with answer cleaning
-Stage 3,Embedding + FAISS RAG,0.204727,0.340807,0.337944,0.415472,Best F1; sentence-level retrieval over provided context
-Ablation,LLM reranking after FAISS,0.164619,0.283865,0.280844,0.350334,More complex but reduced performance
-Ablation,RAG + verification reasoning,0.141256,0.281548,0.267933,0.393947,Verification over-corrected and reduced performance
+HotPotQA is designed for **multi-hop question answering**, where many questions require combining information from multiple Wikipedia passages. A simple LLM prompt without evidence often guesses from model memory and performs poorly. This project explores how adding structured evidence and retrieval improves answer quality.
+
+The project was developed as a practical NLP/LLM coursework pipeline with emphasis on:
+
+- end-to-end reproducibility,
+- robust Colab execution,
+- answer formatting for exact-match evaluation,
+- retrieval-based evidence selection,
+- experimental comparison across pipeline stages.
+
+---
+
+## Dataset
+
+This project uses the **HotPotQA dev fullwiki dataset**:
+
+- Dataset: `hotpot_dev_fullwiki_v1.json`
+- Source: HotPotQA official website  
+- Task: open-domain / multi-hop question answering
+- Input fields used:
+  - `_id`
+  - `question`
+  - `context`
+- Gold fields used only for evaluation:
+  - `answer`
+  - `supporting_facts`
+
+The full dataset is **not included** in this repository. See `data/README.md` for download and placement instructions.
+
+---
+
+## Pipeline Overview
+
+The project was implemented in three main stages.
+
+### Stage 1 — Question-Only Prompting Baseline
+
+The first baseline prompts the LLM using only the question:
+
+```text
+Question: ...
+Answer:

@@ -1,0 +1,9 @@
+numpy
+tqdm
+ujson
+faiss-cpu
+sentence-transformers
+transformers
+accelerate
+bitsandbytes
+unsloth

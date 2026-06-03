@@ -1,0 +1,20 @@
+# Qualitative Examples
+
+This file documents examples where the system succeeds or fails.
+
+---
+
+## Example 1 — Formatting Improvement
+
+```text
+Question:
+What was the nationality of the actor playing a Russian hostage taker in "Hostage for a Day"?
+
+Gold Answer:
+Canadian
+
+Earlier noisy prediction:
+Canadian. (John Candy)
+
+Cleaned prediction:
+Canadian

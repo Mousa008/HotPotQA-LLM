@@ -377,7 +377,7 @@ Possible improvements:
 
 ---
 
-## Technologies Used
+## Tech Used
 
 - Python
 - Google Colab

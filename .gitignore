@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -216,3 +225,40 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+
+
+# HotPotQA data
+data/hotpot_dev_fullwiki_v1.json
+data/hotpot_train_v1.1.json
+data/hotpot_dev_distractor_v1.json
+data/hotpot_test_fullwiki_v1.json
+
+# Prediction outputs
+pred_*.json
+*_pred.json
+outputs/
+results/pred_*.json
+results/*prediction*.json
+
+# Model weights / checkpoints
+*.pt
+*.pth
+*.bin
+*.safetensors
+checkpoints/
+models/
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+*.token
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
